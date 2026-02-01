@@ -2,35 +2,30 @@ name: Garmin to Gemini Sync
 
 on:
   schedule:
-    # This runs at 06:00 UTC every day. 
-    # Adjust '0 6' to your preferred hour (UTC).
-    - cron: '0 6 * * *'
-  workflow_dispatch: # Allows you to trigger it manually via the 'Actions' tab
+    - cron: '0 6 * * *' # 6 AM UTC Daily
+  workflow_dispatch:
 
 jobs:
-  sync_data:
+  run-sync:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
-          cache: 'pip' # Speeds up future runs
+          python-version: '3.11'
+          cache: 'pip'
 
       - name: Install Dependencies
         run: |
-          python -m pip install --upgrade pip
           pip install garminconnect google-api-python-client google-auth-httplib2 google-auth-oauthlib pandas
 
-      - name: Run Garmin Sync Script
+      - name: Execute Sync
         env:
-          # These link your GitHub Secrets to the Python script
           GARMIN_EMAIL: ${{ secrets.GARMIN_EMAIL }}
           GARMIN_PASSWORD: ${{ secrets.GARMIN_PASSWORD }}
-          DRIVE_FOLDER_ID: ${{ secrets.DRIVE_FOLDER_ID }}
           GDRIVE_JSON_KEY: ${{ secrets.GDRIVE_JSON_KEY }}
+          DRIVE_FILE_ID: ${{ secrets.DRIVE_FILE_ID }}
         run: python sync_script.py
