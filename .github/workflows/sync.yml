@@ -2,7 +2,7 @@ name: Garmin to Gemini Sync
 
 on:
   schedule:
-    - cron: '0 6 * * *' # 6 AM UTC Daily
+    - cron: '0 8 * * *' # 6 AM UTC Daily
   workflow_dispatch:
 
 jobs:
